@@ -3,9 +3,12 @@ import "./Login.css";
 
 export const Login = () => {
   const email = useRef();
+  const password = useRef();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(email.current.value);
+    console.log(password.current.value);
   };
 
   return (
@@ -31,6 +34,7 @@ export const Login = () => {
               placeholder="パスワード"
               required
               minLength="6"
+              ref={password}
             />
             <button className="loginButton">ログイン</button>
             <span className="loginForgot">パスワードを忘れた方へ</span>
