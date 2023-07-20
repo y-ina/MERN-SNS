@@ -1,9 +1,14 @@
 import { Chat, Notifications, Search } from "@mui/icons-material";
-import React from "react";
+import React, { useContext } from "react";
 import "./Topbar.css";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../state/AuthContext";
 
 export const Topbar = () => {
+  const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
+  const { user } = useContext(AuthContext);
+  console.log(user);
+
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
@@ -16,7 +21,7 @@ export const Topbar = () => {
           <Search className="searchIcon" />
           <input
             type="text"
-            className="serchInput"
+            className="searchInput"
             placeholder="探し物はなんですか？"
           />
         </div>
@@ -31,7 +36,17 @@ export const Topbar = () => {
             <Notifications />
             <span className="topbarIconBadge">2</span>
           </div>
-          <img src="/assets/person/1.jpeg" alt="" className="topbarImg" />
+          <Link to={`/profile/${user.username}`}>
+            <img
+              src={
+                user.profilePicture
+                  ? PUBLIC_FOLDER + user.profilePicture
+                  : PUBLIC_FOLDER + "/person/noAvatar.png"
+              }
+              alt=""
+              className="topbarImg"
+            />
+          </Link>
         </div>
       </div>
     </div>

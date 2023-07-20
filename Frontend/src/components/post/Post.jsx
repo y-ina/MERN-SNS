@@ -1,10 +1,11 @@
 import { MoreVert } from "@mui/icons-material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Post.css";
 import axios from "axios";
 import { formatDistance } from "date-fns";
 import { ja } from "date-fns/locale";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../state/AuthContext";
 // import { Users } from "../../dummyDate";
 
 export const Post = ({ post }) => {
@@ -12,6 +13,7 @@ export const Post = ({ post }) => {
   const [like, setLike] = useState(post.likes.length);
   const [isLiked, setIsLiked] = useState(false);
   const [user, setUser] = useState({});
+  const { user: currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -23,7 +25,14 @@ export const Post = ({ post }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post.userId]);
 
-  const handleLike = () => {
+  const handleLike = async () => {
+    try {
+      //いいねのAPI叩いていく
+      await axios.put(`/posts/${post._id}/like`, { userId: currentUser._id });
+    } catch (err) {
+      console.log(err);
+    }
+
     setLike(isLiked ? like - 1 : like + 1);
     setIsLiked(!isLiked);
   };
@@ -36,7 +45,9 @@ export const Post = ({ post }) => {
             <Link to={`/profile/${user.username}`}>
               <img
                 src={
-                  user.profilePicture || PUBLIC_FOLDER + "/person/noAvatar.png"
+                  user.profilePicture
+                    ? PUBLIC_FOLDER + user.profilePicture
+                    : PUBLIC_FOLDER + "/person/noAvatar.png"
                 }
                 alt=""
                 className="postProfileImg"
