@@ -69,3 +69,7 @@
   cursor: pointer;
   margin-right: 20px;
 }
+
+#file {
+  display: none;
+}
